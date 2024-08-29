@@ -1,0 +1,7 @@
+*
+
+!.gitignore
+!country/*
+!dist/*
+!src/*
+!tsconfig.json
