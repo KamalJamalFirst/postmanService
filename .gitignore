@@ -26,6 +26,7 @@ com.apple.timemachine.*
 !dist/
 !src/
 !tsconfig.json
+!package.json
 
 !country/**
 !dist/**
