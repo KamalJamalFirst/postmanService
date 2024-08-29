@@ -1,7 +1,13 @@
 *
 
 !.gitignore
-!country/*
-!dist/*
-!src/*
+!country/
+!dist/
+!src/
 !tsconfig.json
+
+!country/**
+!dist/**
+!src/**
+
+!src/generateAggregated/**
