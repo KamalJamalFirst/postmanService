@@ -1,4 +1,24 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS Finder folder attributes
+Icon?
+._*
+
+# macOS directory service store files
+.Spotlight-V100
+.Trashes
+
+# macOS volume info files
+.VolumeIcon.icns
+
+# macOS backup files
+com.apple.timemachine.*
+
 *
+
 !.git/
 !.git/**
 !.gitignore
