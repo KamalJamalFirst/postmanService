@@ -11,13 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.responseToPostman = void 0;
 const index_1 = require("../getIpPhones/index");
-const responseToPostman = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req['query'].country_code);
-    const data = {
-        phone: (0, index_1.getPhone)(req['query'].country_code),
-        ip: yield (0, index_1.getIp)(req['query'].country_code)
-    };
-    return data;
+const responseToPostman = (validatedBody) => __awaiter(void 0, void 0, void 0, function* () {
+    //const phone_element = req.formdata.find((elem) => elem.key === 'phone');
+    validatedBody.phone = yield (0, index_1.getPhone)(validatedBody.country_code);
+    validatedBody.ip = yield (0, index_1.getIp)(validatedBody.country_code);
+    return validatedBody;
 });
 exports.responseToPostman = responseToPostman;
 //# sourceMappingURL=index.js.map

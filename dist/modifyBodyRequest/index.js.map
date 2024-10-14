@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/modifyBodyRequest/index.ts"],"names":[],"mappings":";;AAGA,8CAIC;AAJD,SAAgB,iBAAiB,CAAC,OAAoB,EAAE,cAAkC;IACtF,OAAO,CAAC,QAAQ,CAAC,cAAc,CAAC,WAAW,CAAC,CAAC,KAAK,GAAG,cAAc,CAAC,KAAM,CAAC;IAC3E,OAAO,CAAC,QAAQ,CAAC,cAAc,CAAC,aAAa,CAAC,CAAC,KAAK,GAAG,cAAc,CAAC,EAAG,CAAC;IAC1E,OAAO,OAAO,CAAC;AACnB,CAAC"}

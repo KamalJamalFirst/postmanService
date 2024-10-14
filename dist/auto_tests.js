@@ -8,46 +8,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./generateAggregated/index");
-const index_2 = require("./responseToPostman/index");
-const index_3 = require("./saveDataToFile/index");
-const index_4 = require("./variables/index");
-const express = require('express');
-const ngrok = require("@ngrok/ngrok");
-const app = express();
+require("reflect-metadata");
+const data_source_1 = require("./data-source");
+const index_1 = require("./responseToPostman/index");
+const index_2 = require("./variables/index");
+const index_3 = require("./bodyValidation/index");
+const body_parser_1 = __importDefault(require("body-parser"));
+const express_1 = __importDefault(require("express"));
+const ngrok_1 = __importDefault(require("@ngrok/ngrok"));
+const app = (0, express_1.default)();
 const port = 3000;
-const { countries } = index_4.variables;
-(function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield (0, index_1.createAggregatedFile)();
-        app.get(`/getData`, (req, res) => __awaiter(this, void 0, void 0, function* () {
-            console.log(req);
-            console.log(countries.includes((req.query.country_code).toUpperCase()));
-            if (countries.includes((req.query.country_code).toLowerCase())) {
-                console.log('we started');
-                const data = yield (0, index_2.responseToPostman)(req);
-                res.send(data);
-            }
-            else {
-                res.status(406).send(`Country code ${req.query.country_code} wasn't found. Please use correct country code`);
-            }
-            ;
-        }));
-        app.listen(port, () => {
-            (function () {
-                return __awaiter(this, void 0, void 0, function* () {
-                    const listener = yield ngrok.forward({
-                        addr: 3000,
-                        authtoken_from_env: true,
-                    });
-                    console.log(`Ingress established at: ${listener.url()}`);
+const { countries } = index_2.variables;
+const jsonBodyParser = body_parser_1.default.json();
+const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
+    yield data_source_1.AppDataSource.initialize()
+        .then(() => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("Data Source has been initialized!");
+        //await generateAggregated();
+        (function main() {
+            return __awaiter(this, void 0, void 0, function* () {
+                //await createAggregatedFile();
+                app.post(`/catchData`, jsonBodyParser, (req, res) => __awaiter(this, void 0, void 0, function* () {
+                    console.log(req.body);
+                    const validatedBody = (0, index_3.bodyValidation)(req.body);
+                    if (!Array.isArray(validatedBody)) {
+                        console.log(req.body);
+                        console.log('we passed request body validation');
+                        const newResBody = yield (0, index_1.responseToPostman)(validatedBody);
+                        //const newBody: bodyRequest = modifyBodyRequest(req, data);
+                        res.send(newResBody);
+                    }
+                    else {
+                        console.log(...validatedBody);
+                        res.status(400).send(...validatedBody);
+                    }
+                    // console.log(countries.includes((req.query.country_code).toUpperCase()))
+                    // if (countries.includes((req.query.country_code).toLowerCase())) {
+                    // console.log('we started');
+                    // const data = await responseToPostman(req);
+                    // res.send(data);
+                    // } else {
+                    //     res.status(406).send(`Country code ${req.query.country_code} wasn't found. Please use correct country code`);
+                    // };
+                }));
+                app.listen(port, () => {
+                    (function () {
+                        return __awaiter(this, void 0, void 0, function* () {
+                            const listener = yield ngrok_1.default.forward({
+                                addr: port,
+                                authtoken_from_env: true,
+                            });
+                            console.log(`Ingress established at: ${listener.url()}`);
+                        });
+                    })();
                 });
-            })();
-        });
-        setInterval(index_3.writeToUsedFile, (1000 * 60 * 60));
+                // setInterval(writeToUsedFile, (1000 * 60 * 60));
+            });
+        })();
+    }))
+        .catch((err) => {
+        console.error("Error during Data Source initialization:", err);
     });
-})();
+});
+startApp();
 // function portStopListen(server: Server) {
 //     setTimeout(() => {
 //         console.log('Stopping the server from accepting new connections...');

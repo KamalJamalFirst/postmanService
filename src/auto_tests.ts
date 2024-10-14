@@ -1,47 +1,72 @@
 
-import { createAggregatedFile } from './generateAggregated/index'
+import "reflect-metadata"
+import { AppDataSource } from "./data-source"
+import { generateAggregated } from './generateAggregated/index'
 import { responseToPostman } from './responseToPostman/index'
 import { writeToUsedFile } from './saveDataToFile/index'
-import { variables } from './variables/index';
+import { variables } from './variables/index'
+import { bodyValidation } from "./bodyValidation/index"
+import { bodyRequest } from './interfaces/index'
+import bodyParser from 'body-parser'
+import express from 'express'
+import ngrok from "@ngrok/ngrok"
+import { modifyBodyRequest } from "./modifyBodyRequest"
 
-const express = require('express');
-const ngrok = require("@ngrok/ngrok")
 const app = express();
 const port = 3000;
 const { countries } = variables;
+const jsonBodyParser = bodyParser.json();
 
 
-(async function main() {
-    await createAggregatedFile();
-    app.get(`/getData`, async (req: any, res: any) => {
-        console.log(req);
-        console.log(countries.includes((req.query.country_code).toUpperCase()))
-        if (countries.includes((req.query.country_code).toLowerCase())) {
-            console.log('we started');
-            const data = await responseToPostman(req);
-            res.send(data);
-        } else {
-            res.status(406).send(`Country code ${req.query.country_code} wasn't found. Please use correct country code`);
-        };
-    });
-    app.listen(port, () => {
-        (async function () {
-            const listener = await ngrok.forward({
-                addr: 3000,
-                authtoken_from_env: true,
+
+const startApp = async () => {
+    await AppDataSource.initialize()
+    .then(async () => {
+        console.log("Data Source has been initialized!");
+        //await generateAggregated();
+        (async function main() {
+            //await createAggregatedFile();
+            app.post(`/catchData`, jsonBodyParser, async (req: any, res: any) => {
+                console.log(req.body);
+                const validatedBody = bodyValidation(req.body);
+                if (!Array.isArray(validatedBody)) {
+                    console.log(req.body);
+                    console.log('we passed request body validation');
+                    const newResBody = await responseToPostman(validatedBody);
+                    //const newBody: bodyRequest = modifyBodyRequest(req, data);
+                    res.send(newResBody);
+                } else {
+                    console.log(...validatedBody)
+                    res.status(400).send(...validatedBody);
+                }
+                
+                // console.log(countries.includes((req.query.country_code).toUpperCase()))
+                // if (countries.includes((req.query.country_code).toLowerCase())) {
+                    // console.log('we started');
+                    // const data = await responseToPostman(req);
+                    // res.send(data);
+                // } else {
+                //     res.status(406).send(`Country code ${req.query.country_code} wasn't found. Please use correct country code`);
+                // };
             });
-            console.log(`Ingress established at: ${listener.url()}`);
+            app.listen(port, () => {
+                (async function () {
+                    const listener = await ngrok.forward({
+                        addr: port,
+                        authtoken_from_env: true,
+                    });
+                    console.log(`Ingress established at: ${listener.url()}`);
+                })();
+            });
+        // setInterval(writeToUsedFile, (1000 * 60 * 60));
         })();
+    })
+    .catch((err) => {
+        console.error("Error during Data Source initialization:", err);
     });
-    setInterval(writeToUsedFile, (1000 * 60 * 60));
-})();
+};
 
-
-
-
-
-
-
+startApp();
 
 
 

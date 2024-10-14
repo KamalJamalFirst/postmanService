@@ -1,10 +1,9 @@
+import { bodyRequest, newDataForResponse } from '../interfaces/index';
 import {getIp, getPhone} from '../getIpPhones/index'
 
-export const responseToPostman = async (req: any) => {
-    console.log(req['query'].country_code)
-    const data = {
-        phone: getPhone(req['query'].country_code),
-        ip: await getIp(req['query'].country_code)
-    };
-    return data;
+export const responseToPostman = async (validatedBody: any) => {
+    //const phone_element = req.formdata.find((elem) => elem.key === 'phone');
+    validatedBody.phone = await getPhone(validatedBody.country_code);
+    validatedBody.ip = await getIp(validatedBody.country_code);
+    return validatedBody;
 };
