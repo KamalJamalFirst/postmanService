@@ -1,3 +1,7 @@
+
+dist/*
+country/*
+
 # macOS system files
 .DS_Store
 .AppleDouble
@@ -17,19 +21,15 @@ Icon?
 # macOS backup files
 com.apple.timemachine.*
 
+
+
 *
 
 !.git/
 !.git/**
 !.gitignore
-!country/
-!dist/
+
 !src/
 !tsconfig.json
 !package.json
-
-!country/**
-!dist/**
-!src/**
-
-!src/generateAggregated/**
+!docker-compose.yml

@@ -1,15 +1,12 @@
 import { AppDataSource } from "../data-source"
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
-import { objWithObj, Aggregated } from '../interfaces/index'
+import { Aggregated } from '../interfaces/index'
 
 import { variables } from '../variables/index';
 import { Countries } from '../entities/Countries';
 
-const { countries,
-    fullFile,
-    fullFileForUsed 
-} = variables;
+const { countries } = variables;
 
 
 export async function generateAggregated(): Promise<void> {
@@ -45,8 +42,5 @@ export async function generateAggregated(): Promise<void> {
                 await countryRepository.save(country);
             });
         })();
-        //fullFile[elem['country-code']] = {ip: elem.subnets.ipv4, phoneNumber: []};
-        //fullFileForUsed[elem['country-code']] = {ip: [], phoneNumber: []};
     });
-    //return fullFile;
 };

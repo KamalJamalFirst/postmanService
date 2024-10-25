@@ -13,6 +13,9 @@ export const AppDataSource = new DataSource({
   synchronize: false, // Set to false in production
   logging: true,
   entities: [Countries, Phones], // List your entities here
-  migrations: ["src/migrations/**.ts"], // Adjust the path as needed
+  migrations: ["src/migrations/*.js"], // Adjust the path as needed
+  extra : {
+    "connectionLimit": 10
+  },
   subscribers: [],
 });

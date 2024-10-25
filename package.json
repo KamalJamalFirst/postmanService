@@ -5,7 +5,8 @@
     "build": "tsc --build tsconfig.json",
     "lint": "eslint . --ext .ts",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration:createMigration": "npm run typeorm migration:create", 
+    "migration:createMigration": "typeorm-ts-node-commonjs migration:create ./src/migrations/", 
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate ./src/migrations/creatingTable -d ./src/data-source.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run --dataSource ./src/data-source.ts",
     "migration:revert": "npm run typeorm migration:revert"
   },

@@ -20,16 +20,16 @@ export interface objWithObjForUsed {
     };
 };
 
-export interface bodyRequest {
-    [key: string]: [
-        {
-            description: Object,
-            key: string,
-            value: string,
-            type: string
-        }
-    ]
-}
+// export interface bodyRequest {
+//     [key: string]: [
+//         {
+//             description: Object,
+//             key: string,
+//             value: string,
+//             type: string
+//         }
+//     ]
+// }
 
 export interface newDataForResponse {
     phone: string | undefined,

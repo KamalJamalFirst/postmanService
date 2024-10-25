@@ -1,4 +1,3 @@
-import { bodyRequest, newDataForResponse } from '../interfaces/index';
 import {getIp, getPhone} from '../getIpPhones/index'
 
 export const responseToPostman = async (validatedBody: any) => {

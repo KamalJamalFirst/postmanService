@@ -1,15 +1,12 @@
 import { AppDataSource } from "../data-source"
 import { Countries } from '../entities/Countries';
 import { CountryCode, getExampleNumber, isValidPhoneNumber } from 'libphonenumber-js'
-//import { createAggregatedFile } from '../generateAggregated/index'
 import examples from 'libphonenumber-js/mobile/examples'
 import {setIpToUsed, setUsedPhoneToDb} from '../setIpsPhones/index'
-//const { fullFile, sentIpsToPostman } = require('../variables/index');
 
 
 
 export async function getIp(country: string) {
-    //await createAggregatedFile();
     const countryRepository = await AppDataSource
     .getRepository(Countries) // Specify the entity
     .createQueryBuilder('countries') // Create a query builder instance
@@ -18,20 +15,7 @@ export async function getIp(country: string) {
     .andWhere('countries.used = :used', { used: false }) // Add the condition for Used
     .limit(1) // Limit to one result to get the first suitable value
     .getOne(); // Fetch the first result
-    // const newIp = fullFile[country]['ip'].find((item: string) => {
-    //     if (sentIpsToPostman.has(item)) {
-    //         console.log("new IP wasn't found")
-    //     } else {
-    //         return item;
-    //     };
-    // });
-    // console.log(newIp)
-    // if (newIp) {
-    //     setIp(newIp, country);
-    //     return newIp.slice(0, newIp.indexOf('\/'));
-    // } else {
-    //     console.log("fullFile wasn't aggregated. Some error occured")
-    // };
+
     if (countryRepository?.ip) {
         await setIpToUsed(countryRepository.ip, country);
         return countryRepository.ip.slice(0, countryRepository.ip.indexOf('\/'));

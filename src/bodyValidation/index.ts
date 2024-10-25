@@ -1,20 +1,21 @@
 import { Ajv } from 'ajv'
 import { schema } from '../bodySchema'
-import { bodyRequest } from '../interfaces'
 import { faker } from '@faker-js/faker';
 
-export function bodyValidation(body: bodyRequest) {
+export function bodyValidation(body: any) {
     const normObject = compileNormObjectFromReqBody(body);
     console.log('мы создали новый Json и применили Faker');
     console.log(normObject);
     const ajv = new Ajv()
     const validate = ajv.compile(schema)
     console.log('schema compiled')
-    console.log(validate(normObject))
+    //console.log(validate(normObject))
     if (validate(normObject)) {
+        console.log('мы вовзращаем норм бади')
         return normObject
     } else {
-        console.log(validate.errors)
+        //console.log(validate.errors)
+        console.log('мы вовзращаем ошибку')
         return [
             {
                 'missingProperty': validate.errors![0].params.missingProperty,
@@ -24,19 +25,15 @@ export function bodyValidation(body: bodyRequest) {
     }
 };
 
-function compileNormObjectFromReqBody(body: bodyRequest) {
-    const balvanka: object = {};
-    const entries = Object.entries(balvanka);
-    body.formdata.forEach(e => {
-        entries.push([e.key, e.value]);
-    })
-    const newObj = Object.fromEntries(entries);
-    newObj.first_name = faker.person.firstName();
-    newObj.last_name = faker.person.lastName();
-    newObj.email = faker.internet.email();
-    newObj.phone = faker.phone.number({ style: 'international' });
-    newObj.ip = faker.internet.ip();
-    newObj.is_test = 'true';
-    return newObj;
+function compileNormObjectFromReqBody(body: any) {
+    body.first_name = faker.person.firstName();
+    body.last_name = faker.person.lastName();
+    body.email = faker.internet.email();
+    body.phone = faker.phone.number({ style: 'international' });
+    body.ip = faker.internet.ip();
+    body.is_test = 'true';
+    delete body.ip
+    console.log(`вот он новый объект: ${body}`)
+    return body;
 }
 
