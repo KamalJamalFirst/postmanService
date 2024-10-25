@@ -12,10 +12,10 @@ exports.AppDataSource = new typeorm_1.DataSource({
     username: "postman",
     password: "postman_root",
     database: "postman_auto",
-    synchronize: true, // Set to false in production
-    logging: false,
+    synchronize: false, // Set to false in production
+    logging: true,
     entities: [Countries_1.Countries, Phones_1.Phones], // List your entities here
-    migrations: ["./migrations/*.ts"], // Adjust the path as needed
+    migrations: ["./migrations/**.js"], // Adjust the path as needed
     subscribers: [],
 });
 //# sourceMappingURL=data-source.js.map

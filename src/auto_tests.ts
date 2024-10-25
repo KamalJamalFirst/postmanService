@@ -28,17 +28,17 @@ const startApp = async () => {
             //await createAggregatedFile();
             app.post(`/catchData`, jsonBodyParser, async (req: any, res: any) => {
                 console.log(req.body);
-                const validatedBody = bodyValidation(req.body);
-                if (!Array.isArray(validatedBody)) {
-                    console.log(req.body);
-                    console.log('we passed request body validation');
-                    const newResBody = await responseToPostman(validatedBody);
-                    //const newBody: bodyRequest = modifyBodyRequest(req, data);
-                    res.send(newResBody);
-                } else {
-                    console.log(...validatedBody)
-                    res.status(400).send(...validatedBody);
-                }
+                // const validatedBody = bodyValidation(req.body);
+                // if (!Array.isArray(validatedBody)) {
+                //     console.log(req.body);
+                //     console.log('we passed request body validation');
+                //     const newResBody = await responseToPostman(validatedBody);
+                //     //const newBody: bodyRequest = modifyBodyRequest(req, data);
+                //     res.send(newResBody);
+                // } else {
+                //     console.log(...validatedBody)
+                //     res.status(400).send(...validatedBody);
+                // }
                 
                 // console.log(countries.includes((req.query.country_code).toUpperCase()))
                 // if (countries.includes((req.query.country_code).toLowerCase())) {

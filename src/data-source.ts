@@ -10,9 +10,9 @@ export const AppDataSource = new DataSource({
   username: "postman",
   password: "postman_root",
   database: "postman_auto",
-  synchronize: true, // Set to false in production
-  logging: false,
+  synchronize: false, // Set to false in production
+  logging: true,
   entities: [Countries, Phones], // List your entities here
-  migrations: ["./migrations/*.ts"], // Adjust the path as needed
+  migrations: ["src/migrations/**.ts"], // Adjust the path as needed
   subscribers: [],
 });

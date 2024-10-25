@@ -14,15 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const data_source_1 = require("./data-source");
-const index_1 = require("./responseToPostman/index");
-const index_2 = require("./variables/index");
-const index_3 = require("./bodyValidation/index");
+const index_1 = require("./variables/index");
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_1 = __importDefault(require("express"));
 const ngrok_1 = __importDefault(require("@ngrok/ngrok"));
 const app = (0, express_1.default)();
 const port = 3000;
-const { countries } = index_2.variables;
+const { countries } = index_1.variables;
 const jsonBodyParser = body_parser_1.default.json();
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     yield data_source_1.AppDataSource.initialize()
@@ -34,18 +32,17 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
                 //await createAggregatedFile();
                 app.post(`/catchData`, jsonBodyParser, (req, res) => __awaiter(this, void 0, void 0, function* () {
                     console.log(req.body);
-                    const validatedBody = (0, index_3.bodyValidation)(req.body);
-                    if (!Array.isArray(validatedBody)) {
-                        console.log(req.body);
-                        console.log('we passed request body validation');
-                        const newResBody = yield (0, index_1.responseToPostman)(validatedBody);
-                        //const newBody: bodyRequest = modifyBodyRequest(req, data);
-                        res.send(newResBody);
-                    }
-                    else {
-                        console.log(...validatedBody);
-                        res.status(400).send(...validatedBody);
-                    }
+                    // const validatedBody = bodyValidation(req.body);
+                    // if (!Array.isArray(validatedBody)) {
+                    //     console.log(req.body);
+                    //     console.log('we passed request body validation');
+                    //     const newResBody = await responseToPostman(validatedBody);
+                    //     //const newBody: bodyRequest = modifyBodyRequest(req, data);
+                    //     res.send(newResBody);
+                    // } else {
+                    //     console.log(...validatedBody)
+                    //     res.status(400).send(...validatedBody);
+                    // }
                     // console.log(countries.includes((req.query.country_code).toUpperCase()))
                     // if (countries.includes((req.query.country_code).toLowerCase())) {
                     // console.log('we started');
